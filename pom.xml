@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.hebron</groupId>
+  <artifactId>mp3-player</artifactId>
+  <version>0.1</version>
+  <name>MP3 Player</name>
+  <description>This is the simple mp3 player</description>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>core</module>
+  </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.16.18</version>
+    </dependency>
+  </dependencies>
+
+</project>
