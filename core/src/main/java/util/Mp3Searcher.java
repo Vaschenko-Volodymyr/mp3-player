@@ -32,6 +32,20 @@ public class Mp3Searcher {
         return names.get(cursorIndex);
     }
 
+    public String getPrevious() {
+
+        if (cursorIndex == names.size()) {
+            if (recursively) {
+                cursorIndex = 0;
+            } else {
+                cursorIndex = names.size();
+            }
+        } else {
+            cursorIndex--;
+        }
+        return names.get(cursorIndex);
+    }
+
     public String getLast() {
         return names.get(names.size());
     }
@@ -43,4 +57,6 @@ public class Mp3Searcher {
         }
         return this;
     }
+
+
 }

@@ -39,13 +39,13 @@ public class HebronMp3Player implements Mp3Player {
     public void play() {
         rawPlayer.playMp3(
                 loader.loadMp3(
-                        mp3Directory, searcher.getNext())
+                        mp3Directory, searcher.getPrevious())
                         .getMp3AsStream()
         );
     }
 
     public void stop() {
-        // TODO :
+        rawPlayer.stopMp3();
     }
 
     public void next() {
@@ -53,7 +53,14 @@ public class HebronMp3Player implements Mp3Player {
     }
 
     public void previous() {
-        // TODO :
+        stop();
+        String previousTrackFileName = searcher.getPrevious();
+        rawPlayer.playMp3(
+                loader.loadMp3(mp3Directory, previousTrackFileName)
+                        .getMp3AsStream()
+        );
     }
 
 }
+
+
