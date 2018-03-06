@@ -6,6 +6,9 @@ import util.Mp3FromStreamPlayer;
 import util.Mp3Loader;
 import util.Mp3Searcher;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 @Getter
 public class HebronMp3Player implements Mp3Player {
 
@@ -28,6 +31,7 @@ public class HebronMp3Player implements Mp3Player {
 
     private Codec codec;
     private String mp3Directory;
+    private String currentTrackFileName;
 
 
     HebronMp3Player(Codec codec, String mp3Directory) throws NoSongsException {
@@ -37,11 +41,12 @@ public class HebronMp3Player implements Mp3Player {
     }
 
     public void play() {
-        rawPlayer.playMp3(
-                loader.loadMp3(
-                        mp3Directory, searcher.getNext())
-                        .getMp3AsStream()
-        );
+        try {
+            FileInputStream currentTrackStream = currentTrackStream();
+            rawPlayer.playMp3(currentTrackStream);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void stop() {
@@ -49,16 +54,56 @@ public class HebronMp3Player implements Mp3Player {
     }
 
     public void next() {
-        stop();
-        String nextTrackFileName = searcher.getNext();
-        rawPlayer.playMp3(
-                loader.loadMp3(mp3Directory, nextTrackFileName)
-                .getMp3AsStream()
-        );
+        try {
+            currentTrackFileName = getNextTrackFileName();
+            stop();
+            FileInputStream stream = nextTrackStream();
+            rawPlayer.playMp3(stream);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
+
+
     public void previous() {
-        // TODO :
+        try {
+            currentTrackFileName = getPreviousTrackFileName();
+            stop();
+            FileInputStream stream = previousTrackStream();
+            rawPlayer.playMp3(stream);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private FileInputStream nextTrackStream() throws FileNotFoundException {
+        String nextTrackFileName = searcher.getNext();
+        FileInputStream stream = trackStream(nextTrackFileName);
+        return stream;
+    }
+
+    private FileInputStream previousTrackStream() throws FileNotFoundException {
+        String previousTrackFileName = searcher.getLast();
+        FileInputStream stream = trackStream(previousTrackFileName);
+        return stream;
+    }
+
+    private FileInputStream trackStream(String fileName) throws FileNotFoundException {
+        FileInputStream stream = loader.loadMp3(mp3Directory, fileName).getMp3AsStream();
+        return stream;
+    }
+
+    private String getNextTrackFileName(){
+        return searcher.getNext();
+    }
+
+    private String getPreviousTrackFileName(){
+        return searcher.getLast();
+    }
+
+    private FileInputStream currentTrackStream() throws FileNotFoundException {
+        return trackStream(currentTrackFileName);
     }
 
 }
