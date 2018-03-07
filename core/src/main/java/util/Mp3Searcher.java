@@ -1,6 +1,8 @@
 package util;
 
 import exception.NoSongsException;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,12 +52,21 @@ public class Mp3Searcher {
         return names.get(names.size());
     }
 
-    private Mp3Searcher searchAllMp3Files(String fromDir) throws NoSongsException {
-        // TODO: init names array - find all files with mp3 extension
-        if (names.isEmpty()) {
-            throw new NoSongsException("No songs were found in directory");
+    private void searchAllMp3Files(String fromDir) throws NoSongsException {
+        File[] arrayFile;
+        File file = new File("$user.dir/" + fromDir);
+
+        arrayFile = file.listFiles();
+
+        if (arrayFile == null) {
+            throw new NoSongsException("Тут нет песен");
         }
-        return this;
+        for (File f : arrayFile){
+            String name = f.getName();
+            if (name.endsWith(".mp3")){
+                names.add(name);
+            }
+        }
     }
 
 

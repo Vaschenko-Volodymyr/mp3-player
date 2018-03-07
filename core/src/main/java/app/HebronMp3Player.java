@@ -49,7 +49,12 @@ public class HebronMp3Player implements Mp3Player {
     }
 
     public void next() {
-        // TODO :
+        stop();
+        String nextTrackFileName = searcher.getNext();
+        rawPlayer.playMp3(
+                loader.loadMp3(mp3Directory, nextTrackFileName)
+                .getMp3AsStream()
+        );
     }
 
     public void previous() {
